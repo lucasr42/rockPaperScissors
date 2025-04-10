@@ -158,5 +158,11 @@ async function playGame () {
     const resetButton = document.createElement("button");
     const clickable = document.createTextNode("Reset Game");
     resetButton.appendChild(clickable);
+    resetButton.addEventListener("click", (e) => {
+        console.log("reseting scores");
+        userScore = 0;
+        computerScore = 0;
+        console.log(`Scores reset: user: ${userScore}, computer: ${computerScore}`);
+    });
     document.body.appendChild(resetButton);
 }
