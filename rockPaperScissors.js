@@ -30,30 +30,14 @@ function getComputerChoice () {
     }
 }
 
-// Unchecks the Radio button that was chosen
-function uncheckChoice () {
-    const choice = document.querySelector('input[id="choice"]:checked');
-    if (choice) {
-        document.querySelector('input[id="choice"]').checked = false;
-    } else {
-        console.log("No radio button is selected");
-    }
-}
-
 /**
- * Looks for a checked radio button in the html every 2 seconds
- * Unchecks the radio button if it has been selected
+ * Runs the prompt box
  * 
  * @returns str Rock, Paper, or Scissors
  */
 function getHumanChoice () {
     console.log("getting human choice");
     const humanChoice = prompt("Enter Rock, Paper, or Scissors");
-    // if (document.querySelector('input[id="choice"]:checked')) {
-    //     humanChoice = document.querySelector('input[id="choice"]:checked').value;
-    //     console.log("humanChoice: ", humanChoice, document.querySelector('input[id="choice"]:checked'));
-    //     uncheckChoice();
-    // } 
 
     return humanChoice;
 }
@@ -117,13 +101,33 @@ function outputScore (user, computer) {
     document.getElementById("computerScore").innerHTML= `Computer score: ${computer}`;
 }
 
+/**
+ * Gets the winner by comparing the userScore and computerScore
+ * @param {*} userScore 
+ * @param {*} computerScore 
+ * @returns 
+ */
 function getWinner(userScore, computerScore) {
     return userScore > computerScore ? HUMAN : COMPUTER;
 }
 
-// Test function to output the result of various functions
+/**
+ * Clear the screen of all output
+ */
+function clearElements() {
+    document.getElementById("userInput").innerHTML = "";
+    document.getElementById("computerInput").innerHTML = "";
+    document.getElementById("winner").innerHTML = "";
+    document.getElementById("userScore").innerHTML = "";
+    document.getElementById("computerScore").innerHTML = "";
+    document.getElementById("gameWinner").innerHTML = "";
+    document.getElementById("gameOver").innerHTML = "";
+}
+
+/**
+ * Plays the game
+ */
 async function playGame () {
-    // document.body.innerHTML = "";
     console.log("playing game");
     let userScore = 0;
     let computerScore = 0;
@@ -155,14 +159,12 @@ async function playGame () {
 
     document.getElementById("gameOver").innerHTML = "Game Complete! Play again? Click Play Game above. Thanks for coming!";    
 
-    const resetButton = document.createElement("button");
-    const clickable = document.createTextNode("Reset Game");
-    resetButton.appendChild(clickable);
+    const resetButton = document.getElementById("resetButton");
     resetButton.addEventListener("click", (e) => {
         console.log("reseting scores");
         userScore = 0;
         computerScore = 0;
         console.log(`Scores reset: user: ${userScore}, computer: ${computerScore}`);
+        clearElements();
     });
-    document.body.appendChild(resetButton);
 }
