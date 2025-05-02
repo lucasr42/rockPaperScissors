@@ -1,6 +1,7 @@
 console.log("in the js file");
 const HUMAN = "Human";
 const COMPUTER = "Computer";
+const GAME_CHOICE_DIV = "#gameChoiceContainer";
 
 
 /**
@@ -108,7 +109,22 @@ function outputScore (user, computer) {
  * @returns 
  */
 function getWinner(userScore, computerScore) {
-    return userScore > computerScore ? HUMAN : COMPUTER;
+    // return userScore > computerScore ? HUMAN : COMPUTER;
+    if (userScore === 5) {
+        return HUMAN;
+    } else if (computerScore === 5) {
+        return COMPUTER;
+    } else {
+        return undefined;
+    }
+}
+
+// Prints the winner to the screen
+function outputGameWinner(gameWinner) {
+    const container = document.querySelector("#gameChoiceContainer");
+    const gameWinnerOutput = document.createElement("h1");
+    gameWinnerOutput.textContent = gameWinner + " Won!";
+    container.appendChild(gameWinnerOutput);
 }
 
 /**
@@ -129,11 +145,15 @@ function setControlButtons() {
     // Players don't need to hit it again and hitting it twice causes the gameChoiceContainer div to 
     //  get added twice and I don't want that
     const playBtn = document.querySelector("#playButton");
+    console.log("playBtn.disabled = ", playBtn.disabled);
     playBtn.disabled = !playBtn.disabled;
+    console.log("playBtn.disabled = ", playBtn.disabled);
 
     // Enables the Reset Button once the game has actually started and a user might want to start over
     const resetBtn = document.querySelector("#resetButton");
+    console.log("resetBtn.disabled = ", resetBtn.disabled);
     resetBtn.disabled = !resetBtn;
+    console.log("resetBtn.disabled = ", resetBtn.disabled);
 }
 
 
@@ -143,57 +163,15 @@ function setControlButtons() {
 function playGame () {
     setControlButtons();
     
-    let userScore;
-    let computerScore;
+    let userScore = 0;
+    let computerScore = 0;
     let playerChoice = undefined;
-    let computerChoice;
+    let computerChoice = undefined;
 
-    const choiceHandler = (event, choice) => {
-        console.log("choice: ", choice);
+    // Takes a players choice and gets the computer choice
+    // All of the game calling functions happen here
+    const playRound = (event, choice) => {
         playerChoice = choice;
-    }
-
-    const gameControlContainer = document.querySelector("#gameControls");
-
-    // Add the container for that will hold the Player Choice buttons
-    const gameChoiceContainer = document.createElement("div");
-    gameChoiceContainer.id = "gameChoiceContainer";
-    gameControlContainer.appendChild(gameChoiceContainer);
-
-    // Add Rock button
-    const rockBtn = document.createElement("button");
-    rockBtn.id = "rockBtn";
-    rockBtn.textContent = "Rock";
-    rockBtn.classList.toggle("choiceBtnStyle");
-    rockBtn.addEventListener("click", (event) => {
-        choiceHandler(event, "Rock");
-    });
-    gameChoiceContainer.appendChild(rockBtn);
-
-    // Add Paper Button
-    const paperBtn = document.createElement("button");
-    paperBtn.id = "paperBtn";
-    paperBtn.textContent = "Paper";
-    paperBtn.classList.toggle("choiceBtnStyle");
-    paperBtn.addEventListener("click", (event) => {
-        choiceHandler(event, "Paper");
-    });
-    gameChoiceContainer.appendChild(paperBtn);
-    
-    // Add Scissors button
-    const scissorBtn = document.createElement("button");
-    scissorBtn.id = "scissorBtn";
-    scissorBtn.textContent = "Scissors";
-    scissorBtn.classList.toggle("choiceBtnStyle");
-    scissorBtn.addEventListener("click", (event) => {
-        choiceHandler(event, "Scissors");
-    });
-    gameChoiceContainer.appendChild(scissorBtn);
-    console.log("playerchoice to be returned: ", playerChoice);
-
-    if (playerChoice !== undefined) {
-        console.log(`got a player choice ${playerChoice}`);
-        // Get the computer choice
         computerChoice = getComputerChoice();
 
         outputChoices(playerChoice, computerChoice);
@@ -209,8 +187,59 @@ function playGame () {
         }
 
         outputScore(userScore, computerScore);
+
+        const gameWinner = getWinner(userScore, computerScore);
+
+        if (gameWinner) {
+            outputGameWinner(gameWinner);
+        }
     }
 
+    const gameControlContainer = document.querySelector("#gameControls");
+
+    // Add the container for that will hold the Player Choice buttons
+    const gameChoiceContainer = document.createElement("div");
+    gameChoiceContainer.id = "gameChoiceContainer";
+    gameControlContainer.appendChild(gameChoiceContainer);
+
+    // Add Rock button
+    const rockBtn = document.createElement("button");
+    rockBtn.id = "rockBtn";
+    rockBtn.textContent = "Rock";
+    rockBtn.classList.toggle("choiceBtnStyle");
+    rockBtn.addEventListener("click", (event) => {
+        playRound(event, "Rock");
+    });
+    gameChoiceContainer.appendChild(rockBtn);
+
+    // Add Paper Button
+    const paperBtn = document.createElement("button");
+    paperBtn.id = "paperBtn";
+    paperBtn.textContent = "Paper";
+    paperBtn.classList.toggle("choiceBtnStyle");
+    paperBtn.addEventListener("click", (event) => {
+        playRound(event, "Paper");
+    });
+    gameChoiceContainer.appendChild(paperBtn);
+    
+    // Add Scissors button
+    const scissorBtn = document.createElement("button");
+    scissorBtn.id = "scissorBtn";
+    scissorBtn.textContent = "Scissors";
+    scissorBtn.classList.toggle("choiceBtnStyle");
+    scissorBtn.addEventListener("click", (event) => {
+        playRound(event, "Scissors");
+    });
+    gameChoiceContainer.appendChild(scissorBtn);
+}
+
+function resetGame() {
+    const resetGameBtn = document.querySelector("#resetButton");
+    resetGameBtn.addEventListener("click", () => {
+        console.log("clicking reset buttons");
+        clearElements();
+        setControlButtons();
+    })
 }
 // async function playGame () {
 //     console.log("playing game");
