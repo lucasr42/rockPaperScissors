@@ -123,8 +123,20 @@ function getWinner(userScore, computerScore) {
 function outputGameWinner(gameWinner) {
     const container = document.querySelector("#gameChoiceContainer");
     const gameWinnerOutput = document.createElement("h1");
+    gameWinnerOutput.id = "gameWinnerOutput";
     gameWinnerOutput.textContent = gameWinner + " Won!";
     container.appendChild(gameWinnerOutput);
+}
+
+function disableChoiceButtons() {
+    const rockButton = document.querySelector("#rockBtn");
+    rockButton.disabled = true;
+
+    const paperButton = document.querySelector("#paperBtn");
+    paperButton.disabled = true;
+
+    const scissorsButton = document.querySelector("#scissorBtn");
+    scissorsButton.disabled = true;
 }
 
 /**
@@ -138,6 +150,18 @@ function clearElements() {
     document.getElementById("computerScore").innerHTML = "";
     document.getElementById("gameWinner").innerHTML = "";
     document.getElementById("gameOver").innerHTML = "";
+
+    const rockBtn = document.querySelector("#rockBtn");
+    rockBtn.parentElement.removeChild(rockBtn);
+
+    const paperBtn = document.querySelector("#paperBtn");
+    paperBtn.parentElement.removeChild(paperBtn);
+
+    const scissorBtn = document.querySelector("#scissorBtn");
+    scissorBtn.parentElement.removeChild(scissorBtn);
+
+    const gameWinner = document.querySelector("#gameWinnerOutput");
+    gameWinner.parentElement.removeChild(gameWinner);
 }
 
 function setControlButtons() {
@@ -145,15 +169,20 @@ function setControlButtons() {
     // Players don't need to hit it again and hitting it twice causes the gameChoiceContainer div to 
     //  get added twice and I don't want that
     const playBtn = document.querySelector("#playButton");
-    console.log("playBtn.disabled = ", playBtn.disabled);
     playBtn.disabled = !playBtn.disabled;
-    console.log("playBtn.disabled = ", playBtn.disabled);
 
     // Enables the Reset Button once the game has actually started and a user might want to start over
     const resetBtn = document.querySelector("#resetButton");
-    console.log("resetBtn.disabled = ", resetBtn.disabled);
-    resetBtn.disabled = !resetBtn;
-    console.log("resetBtn.disabled = ", resetBtn.disabled);
+    resetBtn.disabled = !resetBtn.disabled;
+}
+
+// Resets the game and clears the screen
+function resetGame() {
+    const resetGameBtn = document.querySelector("#resetButton");
+    resetGameBtn.addEventListener("click", () => {
+        clearElements();
+        setControlButtons();
+    })
 }
 
 
@@ -191,7 +220,10 @@ function playGame () {
         const gameWinner = getWinner(userScore, computerScore);
 
         if (gameWinner) {
+            disableChoiceButtons();
             outputGameWinner(gameWinner);
+            
+            resetGame();
         }
     }
 
@@ -201,7 +233,6 @@ function playGame () {
     const gameChoiceContainer = document.createElement("div");
     gameChoiceContainer.id = "gameChoiceContainer";
     gameControlContainer.appendChild(gameChoiceContainer);
-
     // Add Rock button
     const rockBtn = document.createElement("button");
     rockBtn.id = "rockBtn";
@@ -233,14 +264,7 @@ function playGame () {
     gameChoiceContainer.appendChild(scissorBtn);
 }
 
-function resetGame() {
-    const resetGameBtn = document.querySelector("#resetButton");
-    resetGameBtn.addEventListener("click", () => {
-        console.log("clicking reset buttons");
-        clearElements();
-        setControlButtons();
-    })
-}
+
 // async function playGame () {
 //     console.log("playing game");
 //     let userScore = 0;
