@@ -1,7 +1,6 @@
 console.log("in the js file");
 const HUMAN = "Human";
 const COMPUTER = "Computer";
-const GAME_CHOICE_DIV = "#gameChoiceContainer";
 
 
 /**
@@ -17,7 +16,6 @@ function getRandomNumber () {
  * @returns Computers random turn choice
  */
 function getComputerChoice () {
-    console.log("getting computer choice");
     const computerNum = getRandomNumber();
     switch (computerNum) {
         case 0:
@@ -32,24 +30,11 @@ function getComputerChoice () {
 }
 
 /**
- * Runs the prompt box
- * 
- * @returns str Rock, Paper, or Scissors
- */
-function getHumanChoice () {
-    console.log("getting human choice");
-    const humanChoice = prompt("Enter Rock, Paper, or Scissors");
-
-    return humanChoice;
-}
-
-/**
  * Prints to the screen the user and computer choices
  * @param {*} humanChoice 
  * @param {*} computerChoice 
  */
 function outputChoices (humanChoice, computerChoice) {
-    console.log("outputing choices: ", humanChoice, "computerChoice: ", computerChoice);
     document.getElementById("userInput").innerHTML = `You chose: ${humanChoice}`;
     document.getElementById("computerInput").innerHTML = `Computer chose: ${computerChoice}`;
 }
@@ -64,7 +49,7 @@ function outputChoices (humanChoice, computerChoice) {
 function determineWinner (humanChoice, computerChoice) {
     const human = humanChoice.toLowerCase();
     const computer = computerChoice.toLowerCase();
-    console.log("determining winner - human choice: ", humanChoice, " computer choice: ", computerChoice);
+
     if (human === computer) {
         return "Tie";
     } else if (human === "rock" && computer === "scissors") {
@@ -83,7 +68,6 @@ function determineWinner (humanChoice, computerChoice) {
  * @param {string} winner "User" or COMPUTER
  */
 function outputWinner (winner) {
-    console.log("outputing winner: ", winner);
     if (winner == "Tie") {
         document.getElementById("winner").innerHTML = "This round was a Tie";
     } else {
@@ -97,7 +81,6 @@ function outputWinner (winner) {
  * @param {*} computer 
  */
 function outputScore (user, computer) {
-    console.log("outputting score: ", user, computer);
     document.getElementById("userScore").innerHTML = `Your score: ${user}`;
     document.getElementById("computerScore").innerHTML= `Computer score: ${computer}`;
 }
@@ -109,7 +92,6 @@ function outputScore (user, computer) {
  * @returns 
  */
 function getWinner(userScore, computerScore) {
-    // return userScore > computerScore ? HUMAN : COMPUTER;
     if (userScore === 5) {
         return HUMAN;
     } else if (computerScore === 5) {
@@ -128,6 +110,8 @@ function outputGameWinner(gameWinner) {
     container.appendChild(gameWinnerOutput);
 }
 
+// Disabled the Rock, Paper, Scissors buttons at the end of the game so 
+//  the user can't keep clicking them
 function disableChoiceButtons() {
     const rockButton = document.querySelector("#rockBtn");
     rockButton.disabled = true;
@@ -143,27 +127,23 @@ function disableChoiceButtons() {
  * Clear the screen of all output
  */
 function clearElements() {
-    document.getElementById("userInput").innerHTML = "";
-    document.getElementById("computerInput").innerHTML = "";
-    document.getElementById("winner").innerHTML = "";
-    document.getElementById("userScore").innerHTML = "";
-    document.getElementById("computerScore").innerHTML = "";
-    document.getElementById("gameWinner").innerHTML = "";
-    document.getElementById("gameOver").innerHTML = "";
+    const bold = document.querySelectorAll("b");
+    const boldArray = [...bold];
+    boldArray.forEach((item) => {
+        item.textContent = "";
+    })
 
     const rockBtn = document.querySelector("#rockBtn");
     rockBtn.parentElement.removeChild(rockBtn);
-
     const paperBtn = document.querySelector("#paperBtn");
     paperBtn.parentElement.removeChild(paperBtn);
-
     const scissorBtn = document.querySelector("#scissorBtn");
     scissorBtn.parentElement.removeChild(scissorBtn);
-
-    const gameWinner = document.querySelector("#gameWinnerOutput");
-    gameWinner.parentElement.removeChild(gameWinner);
+    const gameChoiceContainer = document.querySelector("#gameChoiceContainer");
+    gameChoiceContainer.parentElement.removeChild(gameChoiceContainer);   
 }
 
+// Flips the disabled attr for Play Game and Reset Game buttons
 function setControlButtons() {
     // Disabled the Start button once the game has started.
     // Players don't need to hit it again and hitting it twice causes the gameChoiceContainer div to 
@@ -178,13 +158,9 @@ function setControlButtons() {
 
 // Resets the game and clears the screen
 function resetGame() {
-    const resetGameBtn = document.querySelector("#resetButton");
-    resetGameBtn.addEventListener("click", () => {
-        clearElements();
-        setControlButtons();
-    })
+    clearElements();
+    setControlButtons();
 }
-
 
 /**
  * Plays the game
@@ -223,7 +199,7 @@ function playGame () {
             disableChoiceButtons();
             outputGameWinner(gameWinner);
             
-            resetGame();
+            // resetGame();
         }
     }
 
@@ -263,46 +239,3 @@ function playGame () {
     });
     gameChoiceContainer.appendChild(scissorBtn);
 }
-
-
-// async function playGame () {
-//     console.log("playing game");
-//     let userScore = 0;
-//     let computerScore = 0;
-//     // Break the loop if either one is 5
-//     while (userScore < 5 && computerScore < 5) {
-//         const humanChoice = getHumanChoice();
-//         const computerChoice = getComputerChoice();
-//         console.log("choices in loop: ", humanChoice, computerChoice);
-
-//         outputChoices(humanChoice, computerChoice);
-
-//         const winner = determineWinner(humanChoice, computerChoice);
-
-//         outputWinner(winner);
-
-//         if (winner === HUMAN) {
-//             userScore++;
-//         } else if (winner === COMPUTER) {
-//             computerScore++;
-//         }
-
-//         outputScore(userScore, computerScore);
-
-//         await new Promise(resolve => setTimeout(resolve), 5000);
-//     }
-
-//     const gameWinner = getWinner(userScore, computerScore);
-//     document.getElementById("gameWinner").innerHTML = gameWinner + " Won the Game!";
-
-//     document.getElementById("gameOver").innerHTML = "Game Complete! Play again? Click Play Game above. Thanks for coming!";    
-
-//     const resetButton = document.getElementById("resetButton");
-//     resetButton.addEventListener("click", (e) => {
-//         console.log("reseting scores");
-//         userScore = 0;
-//         computerScore = 0;
-//         console.log(`Scores reset: user: ${userScore}, computer: ${computerScore}`);
-//         clearElements();
-//     });
-// }
