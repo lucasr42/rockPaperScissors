@@ -124,22 +124,81 @@ function clearElements() {
     document.getElementById("gameOver").innerHTML = "";
 }
 
+function setControlButtons() {
+    // Disabled the Start button once the game has started.
+    // Players don't need to hit it again and hitting it twice causes the gameChoiceContainer div to 
+    //  get added twice and I don't want that
+    const playBtn = document.querySelector("#playButton");
+    playBtn.disabled = !playBtn.disabled;
+
+    // Enables the Reset Button once the game has actually started and a user might want to start over
+    const resetBtn = document.querySelector("#resetButton");
+    resetBtn.disabled = !resetBtn;
+}
+
+
 /**
  * Plays the game
  */
-async function playGame () {
-    console.log("playing game");
-    let userScore = 0;
-    let computerScore = 0;
-    // Break the loop if either one is 5
-    while (userScore < 5 && computerScore < 5) {
-        const humanChoice = getHumanChoice();
-        const computerChoice = getComputerChoice();
-        console.log("choices in loop: ", humanChoice, computerChoice);
+function playGame () {
+    setControlButtons();
+    
+    let userScore;
+    let computerScore;
+    let playerChoice = undefined;
+    let computerChoice;
 
-        outputChoices(humanChoice, computerChoice);
+    const choiceHandler = (event, choice) => {
+        console.log("choice: ", choice);
+        playerChoice = choice;
+    }
 
-        const winner = determineWinner(humanChoice, computerChoice);
+    const gameControlContainer = document.querySelector("#gameControls");
+
+    // Add the container for that will hold the Player Choice buttons
+    const gameChoiceContainer = document.createElement("div");
+    gameChoiceContainer.id = "gameChoiceContainer";
+    gameControlContainer.appendChild(gameChoiceContainer);
+
+    // Add Rock button
+    const rockBtn = document.createElement("button");
+    rockBtn.id = "rockBtn";
+    rockBtn.textContent = "Rock";
+    rockBtn.classList.toggle("choiceBtnStyle");
+    rockBtn.addEventListener("click", (event) => {
+        choiceHandler(event, "Rock");
+    });
+    gameChoiceContainer.appendChild(rockBtn);
+
+    // Add Paper Button
+    const paperBtn = document.createElement("button");
+    paperBtn.id = "paperBtn";
+    paperBtn.textContent = "Paper";
+    paperBtn.classList.toggle("choiceBtnStyle");
+    paperBtn.addEventListener("click", (event) => {
+        choiceHandler(event, "Paper");
+    });
+    gameChoiceContainer.appendChild(paperBtn);
+    
+    // Add Scissors button
+    const scissorBtn = document.createElement("button");
+    scissorBtn.id = "scissorBtn";
+    scissorBtn.textContent = "Scissors";
+    scissorBtn.classList.toggle("choiceBtnStyle");
+    scissorBtn.addEventListener("click", (event) => {
+        choiceHandler(event, "Scissors");
+    });
+    gameChoiceContainer.appendChild(scissorBtn);
+    console.log("playerchoice to be returned: ", playerChoice);
+
+    if (playerChoice !== undefined) {
+        console.log(`got a player choice ${playerChoice}`);
+        // Get the computer choice
+        computerChoice = getComputerChoice();
+
+        outputChoices(playerChoice, computerChoice);
+
+        const winner = determineWinner(playerChoice, computerChoice);
 
         outputWinner(winner);
 
@@ -150,21 +209,47 @@ async function playGame () {
         }
 
         outputScore(userScore, computerScore);
-
-        await new Promise(resolve => setTimeout(resolve), 5000);
     }
 
-    const gameWinner = getWinner(userScore, computerScore);
-    document.getElementById("gameWinner").innerHTML = gameWinner + " Won the Game!";
-
-    document.getElementById("gameOver").innerHTML = "Game Complete! Play again? Click Play Game above. Thanks for coming!";    
-
-    const resetButton = document.getElementById("resetButton");
-    resetButton.addEventListener("click", (e) => {
-        console.log("reseting scores");
-        userScore = 0;
-        computerScore = 0;
-        console.log(`Scores reset: user: ${userScore}, computer: ${computerScore}`);
-        clearElements();
-    });
 }
+// async function playGame () {
+//     console.log("playing game");
+//     let userScore = 0;
+//     let computerScore = 0;
+//     // Break the loop if either one is 5
+//     while (userScore < 5 && computerScore < 5) {
+//         const humanChoice = getHumanChoice();
+//         const computerChoice = getComputerChoice();
+//         console.log("choices in loop: ", humanChoice, computerChoice);
+
+//         outputChoices(humanChoice, computerChoice);
+
+//         const winner = determineWinner(humanChoice, computerChoice);
+
+//         outputWinner(winner);
+
+//         if (winner === HUMAN) {
+//             userScore++;
+//         } else if (winner === COMPUTER) {
+//             computerScore++;
+//         }
+
+//         outputScore(userScore, computerScore);
+
+//         await new Promise(resolve => setTimeout(resolve), 5000);
+//     }
+
+//     const gameWinner = getWinner(userScore, computerScore);
+//     document.getElementById("gameWinner").innerHTML = gameWinner + " Won the Game!";
+
+//     document.getElementById("gameOver").innerHTML = "Game Complete! Play again? Click Play Game above. Thanks for coming!";    
+
+//     const resetButton = document.getElementById("resetButton");
+//     resetButton.addEventListener("click", (e) => {
+//         console.log("reseting scores");
+//         userScore = 0;
+//         computerScore = 0;
+//         console.log(`Scores reset: user: ${userScore}, computer: ${computerScore}`);
+//         clearElements();
+//     });
+// }

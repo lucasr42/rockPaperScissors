@@ -4,16 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=<device-width>, initial-scale=1.0">
-    <title>Document</title>
+    <title>Rock, Paper, Scissors</title>
     <link rel="stylesheet" href="./styles.css" />
+    <script src="./rockPaperScissors.js" defer></script>
 </head>
 
 <body>
-    <script src="./rockPaperScissors.js">
+    <!-- <script src="./rockPaperScissors.js">
         console.log("hello world");
-    </script>
-    <input type="button" onclick="playGame()" value="Play Game">
-    <input id="resetButton" type="button" value="Reset Game"><br><br>
+    </script> -->
+    <h1>Welcome to Rock, Paper, Scissors!</h1>
+
+    <div id="gameControls">
+        <input class="controlButtonStyle" id="playButton" type="button" onclick="playGame()" value="Play Game">
+        <input class="controlButtonStyle" id="resetButton" type="button" value="Reset Game" disabled><br><br>
+    </div>
+
+
+    <!-- <input type="button" value="Rock" id="rock" />
+    <input type="button" value="Paper" id="paper" />
+    <input type="button" value="Scissors" id="scissors" /> -->
 
     <b id="userInput"></b><br>
     <b id="computerInput"></b><br><br>

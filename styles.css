@@ -1,8 +1,23 @@
 body {
     background-color: black;
     color: white;
+    /* display: flex; */
 }
 
 .radioLabel {
     color: white;
+}
+
+.controlButtonStyle {
+    padding: 10px;
+    margin: 0px 10px 20px 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.choiceBtnStyle {
+    padding: 10px;
+    margin: 50px 10px 20px 10px;
+    font-weight: bold;
+    font-size: 20px;
 }
